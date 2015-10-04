@@ -20,7 +20,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 //TODO Add argument for conversion result  - > MD / EAST / RJS
 @Service
 public class CommandLineInterpreter {
-    Queue<String> commands = new ArrayBlockingQueue<>(4);
+    final Queue<String> commands = new ArrayBlockingQueue<>(4);
     String source;
     String target;
 
@@ -50,7 +50,7 @@ public class CommandLineInterpreter {
      * @return Entry\\\<FromFile, TargetFile\\>
      * @throws IllegalArgumentException
      */
-    public Map.Entry process() {
+    public Map.Entry<String, String> process() {
         if (commands.size() != 3 && commands.size() != 2) {
             throw new IllegalArgumentException("Invalid argument count :" + commands.size());
         }
@@ -60,7 +60,7 @@ public class CommandLineInterpreter {
             process2();
         }
         assert (source != null && target != null) : "source and target files should both exist";
-        return new AbstractMap.SimpleEntry(source, target);
+        return new AbstractMap.SimpleEntry<>(source, target);
     }
 
 

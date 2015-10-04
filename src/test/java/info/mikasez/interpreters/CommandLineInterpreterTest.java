@@ -10,15 +10,12 @@ import java.nio.file.Paths;
 import java.util.AbstractMap;
 import java.util.Map;
 
-/**
- * Created by MikaSez on 04/10/2015.
- */
 public class CommandLineInterpreterTest {
 
     private static final String targetFile = "/Users/MikaSez/IdeasProjects/R7Converter/src/test/resources/fileResources/targetFile";
     private static final String sourceFile = "/Users/MikaSez/IdeasProjects/R7Converter/src/test/resources/fileResources/sourceFile";
     private static final AbstractMap.SimpleEntry<String, String> result = new AbstractMap.SimpleEntry<>(sourceFile, targetFile);
-    CommandLineInterpreter tested = new CommandLineInterpreter();
+    private final CommandLineInterpreter tested = new CommandLineInterpreter();
 
     @Before
     public void setUp() throws Exception {
