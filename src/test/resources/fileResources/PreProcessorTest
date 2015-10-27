@@ -1,0 +1,21 @@
+The content of this file is taken directly from markdown documentation for test purposes
+
+On July 2, an alien mothership entered Earth's orbit and deployed several dozen saucer-shaped "destroyer" spacecraft, each 15 miles (24 km)  wide.
+
+# The largest heading (an <h1> tag)
+
+* Item
+* Item
+
+
+*This text will be italic*
+**This text will be bold**
+
+
+
+```ruby
+require 'redcarpet'
+markdown = Redcarpet.new("Hello World!")
+puts markdown.to_html
+```
+
