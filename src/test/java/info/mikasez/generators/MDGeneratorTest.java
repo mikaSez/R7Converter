@@ -18,8 +18,11 @@ public class MDGeneratorTest {
     public void setUp() {
         Element element = new Element(DocType.Root);
         Element p = new Element(DocType.Paragraph);
-        p.addTextChild("On July 2, an alien mothership entered Earth's orbit and deployed several dozen saucer-shaped \"destroyer\" spacecraft, each 15 miles (24 km)  wide.");
-
+        p.addTextChild("On July 2,");
+        Element ocode = new Element(DocType.OneLineCode);
+        ocode.addTextChild("an alien mothership");
+        p.addChild(ocode);
+        p.addTextChild("entered Earth's orbit and deployed several dozen saucer-shaped \"destroyer\" spacecraft, each 15 miles (24 km)  wide.");
         Element h = new Element(DocType.Header1);
         h.addTextChild("Header1");
         Element h2 = new Element(DocType.Header2);
@@ -49,6 +52,18 @@ public class MDGeneratorTest {
 
         element.addChild(list);
 
+        Element bq = new Element(DocType.BlockQuote);
+        bq.addTextChild("Pardon my french is a blockquote");
+        Element em = new Element(DocType.Emphasis);
+        Element sem = new Element(DocType.StrongEmphasis);
+
+        em.addTextChild("Text in italic");
+        sem.addTextChild("Bold Text");
+        bq.addChild(em);
+        bq.addChild(sem);
+        element.addChild(bq);
+
+
         tested = new Generator(element, new MDTagMatcher());
     }
 
@@ -59,10 +74,13 @@ public class MDGeneratorTest {
         sb.append("# Header1\n");
         sb.append("## Header2\n");
         sb.append("### Header3\n");
-        sb.append("On July 2, an alien mothership entered Earth's orbit and deployed several dozen saucer-shaped \"destroyer\" spacecraft, each 15 miles (24 km)  wide.\n");
+        sb.append("On July 2, `an alien mothership` entered Earth's orbit and deployed several dozen saucer-shaped \"destroyer\" spacecraft, each 15 miles (24 km)  wide.\n");
         sb.append("* Item 1\n");
         sb.append("* Item 2\n");
         sb.append("* Item 3\n");
+        sb.append("\n");
+        sb.append("> Pardon my french is a blockquote *Text in italic*  **Bold Text** ");
+
         sb.append("\n");
         sb.append("\n");
         Assert.assertEquals(sb.toString(), tested.generate());

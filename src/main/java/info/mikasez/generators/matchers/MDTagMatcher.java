@@ -10,7 +10,17 @@ public class MDTagMatcher implements TagMatcher {
 
     @Override
     public String getPostTag(DocType type) {
-        return "\n";
+        switch (type) {
+            case Emphasis:
+                return "* ";
+            case StrongEmphasis:
+                return "** ";
+            case OneLineCode:
+                return "` ";
+            default:
+                return "\n";
+        }
+
     }
 
     @Override
@@ -34,6 +44,14 @@ public class MDTagMatcher implements TagMatcher {
                 return "";
             case ListElement:
                 return "* ";
+            case BlockQuote:
+                return "> ";
+            case Emphasis:
+                return " *";
+            case StrongEmphasis:
+                return " **";
+            case OneLineCode:
+                return " `";
             default:
                 return "";
         }
