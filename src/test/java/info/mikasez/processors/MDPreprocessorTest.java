@@ -2,7 +2,7 @@ package info.mikasez.processors;
 
 import info.mikasez.processors.properties.Line;
 import info.mikasez.processors.properties.MDPreprocessor;
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.FileInputStream;

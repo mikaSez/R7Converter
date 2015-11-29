@@ -1,6 +1,6 @@
 package info.mikasez.generators;
 
-import info.mikasez.generators.matchers.MDTagMatcher;
+import info.mikasez.generators.matchers.EASTTagMatcher;
 import info.mikasez.models.DocType;
 import info.mikasez.models.Element;
 import org.junit.Assert;
@@ -8,9 +8,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Created by MikaSez on 27/10/2015.
+ * Created by MikaSez on 29/11/2015.
  */
-public class MDGeneratorTest {
+public class EASTGeneratorTest {
     private Generator tested;
 
 
@@ -19,7 +19,7 @@ public class MDGeneratorTest {
         Element element = new Element(DocType.Root);
         Element p = new Element(DocType.Paragraph);
         p.addTextChild("On July 2,");
-        Element ocode = new Element(DocType.OneLineCode);
+        Element ocode = new Element(DocType.Emphasis);
         ocode.addTextChild("an alien mothership");
         p.addChild(ocode);
         p.addTextChild("entered Earth's orbit and deployed several dozen saucer-shaped \"destroyer\" spacecraft, each 15 miles (24 km)  wide.");
@@ -28,14 +28,10 @@ public class MDGeneratorTest {
         Element h2 = new Element(DocType.Header2);
 
         h2.addTextChild("Header2");
-        Element h3 = new Element(DocType.Header3);
-
-        h3.addTextChild("Header3");
 
 
         element.addChild(h);
         element.addChild(h2);
-        element.addChild(h3);
         element.addChild(p);
 
         Element list = new Element(DocType.List);
@@ -52,36 +48,38 @@ public class MDGeneratorTest {
 
         element.addChild(list);
 
-        Element bq = new Element(DocType.BlockQuote);
-        bq.addTextChild("Pardon my french is a blockquote");
-        Element em = new Element(DocType.Emphasis);
-        Element sem = new Element(DocType.StrongEmphasis);
 
-        em.addTextChild("Text in italic");
-        sem.addTextChild("Bold Text");
-        bq.addChild(em);
-        bq.addChild(sem);
-        element.addChild(bq);
-
-
-        tested = new Generator(element, new MDTagMatcher());
+        tested = new Generator(element, new EASTTagMatcher());
     }
 
 
     @Test
     public void generateTest() {
         StringBuilder sb = new StringBuilder();
-        sb.append("# Header1\n");
-        sb.append("## Header2\n");
-        sb.append("### Header3\n");
-        sb.append("On July 2, `an alien mothership` entered Earth's orbit and deployed several dozen saucer-shaped \"destroyer\" spacecraft, each 15 miles (24 km)  wide.\n");
-        sb.append("* Item 1\n");
-        sb.append("* Item 2\n");
-        sb.append("* Item 3\n");
-        sb.append("\n");
-        sb.append("> Pardon my french is a blockquote *Text in italic*  **Bold Text** ");
-        sb.append("\n");
+        sb.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?><EAST transition=\"burst\">\n" +
+                "<PREFERENCES>\n" +
+                "<AFFICHAGE>\n" +
+                "<POLICE_TEXTE font=\"Comic Sans MS\"/>\n" +
+                "</AFFICHAGE>\n" +
+                "</PREFERENCES>\n" +
+                "<TITRE>\n" +
+                "Header1\n" +
+                "</TITRE>\n" +
+                "\n" +
+                "<TITRE>\n" +
+                "Header2\n" +
+                "</TITRE>\n" +
+                "\n" +
+                "<PARAGRAPH>\n" +
+                "On July 2,<EMPHASE>an alien mothership</EMPHASE>entered Earth's orbit and deployed several dozen saucer-shaped \"destroyer\" spacecraft, each 15 miles (24 km)  wide.\n" +
+                "</PARAGRAPH>\n" +
+                "<LISTE couleur_puce=\"green\" type=\"square\">\n" +
+                "<EL>Item 1</EL>\n" +
+                "<EL>Item 2</EL>\n" +
+                "<EL>Item 3</EL>\n" +
+                "\n" +
+                "</LISTE>\n" +
+                "</EAST>");
         Assert.assertEquals(sb.toString(), tested.generate());
     }
-
 }

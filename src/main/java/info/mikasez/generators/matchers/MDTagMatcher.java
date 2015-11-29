@@ -17,6 +17,8 @@ public class MDTagMatcher implements TagMatcher {
                 return "** ";
             case OneLineCode:
                 return "` ";
+            case Root:
+                return "";
             default:
                 return "\n";
         }
