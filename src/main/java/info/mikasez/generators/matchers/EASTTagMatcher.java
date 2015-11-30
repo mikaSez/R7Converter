@@ -9,7 +9,12 @@ public class EASTTagMatcher implements TagMatcher {
     @Override
     public String getPostTag(DocType type) {
         switch (type) {
-
+            case Table:
+                return "\n</TABLES>";
+            case TabHeaderElement:
+                return "\n</TAB_ENTETE>";
+            case TabBodyElement:
+                return "\n</TAB_CORPS>";
             case Root:
                 return "\n</EAST>";
             case Header1:
@@ -20,7 +25,9 @@ public class EASTTagMatcher implements TagMatcher {
             case ListElement:
                 return "</EL>\n";
             case Emphasis:
-                return "</EMPHASE>";
+                return "</EMPHASE> ";
+            case Slide:
+                return "\n</SECTION>\n";
             case Paragraph:
                 return "\n</PARAGRAPH>\n";
             default:
@@ -31,6 +38,12 @@ public class EASTTagMatcher implements TagMatcher {
     @Override
     public String getPreTag(DocType type) {
         switch (type) {
+            case Table:
+                return "<TABLES>\n";
+            case TabHeaderElement:
+                return "<TAB_ENTETE>\n";
+            case TabBodyElement:
+                return "<TAB_CORPS>\n";
             case Root:
                 return "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?><EAST transition=\"burst\">\n" +
                         "<PREFERENCES>\n" +
@@ -46,9 +59,11 @@ public class EASTTagMatcher implements TagMatcher {
             case ListElement:
                 return "<EL>";
             case Emphasis:
-                return "<EMPHASE>";
+                return " <EMPHASE>";
             case Paragraph:
                 return "\n<PARAGRAPH>\n";
+            case Slide:
+                return "\n<SECTION>\n";
             default:
                 return "";
         }

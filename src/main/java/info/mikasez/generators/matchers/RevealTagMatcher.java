@@ -9,6 +9,18 @@ public class RevealTagMatcher implements TagMatcher {
     @Override
     public String getPostTag(DocType type) {
         switch (type) {
+            case Slide:
+                return "</section>\n";
+            case TabBody:
+                return "</tr>\n";
+            case TabBodyElement:
+                return "</td>\n";
+            case TabHeader:
+                return "</tr>\n";
+            case TabHeaderElement:
+                return "</th>\n";
+            case Table:
+                return "</table>\n";
             case Paragraph:
                 return "</p>\n";
             case Header1:
@@ -52,8 +64,21 @@ public class RevealTagMatcher implements TagMatcher {
     @Override
     public String getPreTag(DocType type) {
         switch (type) {
+            case Slide:
+                return "\n<section>";
             case Paragraph:
                 return "\n<p>";
+            case Table:
+                return "\n<table>";
+            case TabBody:
+                return "\n<tr>";
+            case TabBodyElement:
+                return "\n<td>";
+            case TabHeader:
+                return "\n<tr>";
+            case TabHeaderElement:
+                return "\n<th>";
+
             case Header1:
                 return "\n<h1>";
             case Header2:
@@ -69,7 +94,7 @@ public class RevealTagMatcher implements TagMatcher {
             case List:
                 return "\n<ul>";
             case ListElement:
-                return "\n</li>";
+                return "\n<li>";
             case BlockQuote:
                 return "\n<blockquote>";
             case Emphasis:
@@ -85,6 +110,7 @@ public class RevealTagMatcher implements TagMatcher {
                         "<meta charset=\"utf-8\">\n" +
                         "<title>reveal.js - Barebones</title>\n" +
                         "<link rel=\"stylesheet\" href=\"http://lab.hakim.se/reveal-js/css/reveal.css\">\n" +
+                        "<link rel=\"stylesheet\" href=\"http://lab.hakim.se/reveal-js/css/theme/black.css\">" +
                         "</head>\n" +
                         "<body>\n" +
                         "<div class=\"reveal\">\n" +

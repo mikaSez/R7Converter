@@ -29,10 +29,16 @@ public class RevealGeneratorTest {
 
         h2.addTextChild("Header2");
 
+        Element slide1 = new Element(DocType.Slide);
 
-        element.addChild(h);
-        element.addChild(h2);
-        element.addChild(p);
+        slide1.addChild(h);
+        slide1.addChild(h2);
+        element.addChild(slide1);
+
+        Element slide2 = new Element(DocType.Slide);
+        slide2.addChild(p);
+
+        element.addChild(slide2);
 
         Element list = new Element(DocType.List);
 
@@ -46,7 +52,10 @@ public class RevealGeneratorTest {
         lc3.addTextChild("Item 3");
         list.addChild(lc3);
 
-        element.addChild(list);
+
+        Element slide3 = new Element(DocType.Slide);
+        slide3.addChild(list);
+        element.addChild(slide3);
 
 
         tested = new Generator(element, new RevealTagMatcher());
@@ -62,23 +71,29 @@ public class RevealGeneratorTest {
                 "<meta charset=\"utf-8\">\n" +
                 "<title>reveal.js - Barebones</title>\n" +
                 "<link rel=\"stylesheet\" href=\"http://lab.hakim.se/reveal-js/css/reveal.css\">\n" +
+                "<link rel=\"stylesheet\" href=\"http://lab.hakim.se/reveal-js/css/theme/black.css\">" +
                 "</head>\n" +
                 "<body>\n" +
                 "<div class=\"reveal\">\n" +
                 "<div class=\"slides\">\n" +
+                "<section>\n" +
                 "<h1>Header1</h1>\n" +
                 "\n" +
                 "<h2>Header2</h2>\n" +
+                "</section>\n" +
                 "\n" +
+                "<section>\n" +
                 "<p>On July 2, <em>an alien mothership</em> entered Earth's orbit and deployed several dozen saucer-shaped \"destroyer\" spacecraft, each 15 miles (24 km)  wide.</p>\n" +
-                "\n" +
+                "</section>\n\n" +
+                "<section>\n" +
                 "<ul>\n" +
-                "</li>Item 1</li>\n" +
+                "<li>Item 1</li>\n" +
                 "\n" +
-                "</li>Item 2</li>\n" +
+                "<li>Item 2</li>\n" +
                 "\n" +
-                "</li>Item 3</li>\n" +
+                "<li>Item 3</li>\n" +
                 "</ul>\n" +
+                "</section>\n" +
                 "</div>\n" +
                 "</div>\n" +
                 "<script src=\"http://lab.hakim.se/reveal-js/js/reveal.js\"></script>\n" +

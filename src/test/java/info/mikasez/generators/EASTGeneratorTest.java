@@ -29,10 +29,16 @@ public class EASTGeneratorTest {
 
         h2.addTextChild("Header2");
 
+        Element slide1 = new Element(DocType.Slide);
 
-        element.addChild(h);
-        element.addChild(h2);
-        element.addChild(p);
+        slide1.addChild(h);
+        slide1.addChild(h2);
+        element.addChild(slide1);
+
+        Element slide2 = new Element(DocType.Slide);
+        slide2.addChild(p);
+
+        element.addChild(slide2);
 
         Element list = new Element(DocType.List);
 
@@ -46,7 +52,10 @@ public class EASTGeneratorTest {
         lc3.addTextChild("Item 3");
         list.addChild(lc3);
 
-        element.addChild(list);
+
+        Element slide3 = new Element(DocType.Slide);
+        slide3.addChild(list);
+        element.addChild(slide3);
 
 
         tested = new Generator(element, new EASTTagMatcher());
@@ -62,6 +71,9 @@ public class EASTGeneratorTest {
                 "<POLICE_TEXTE font=\"Comic Sans MS\"/>\n" +
                 "</AFFICHAGE>\n" +
                 "</PREFERENCES>\n" +
+
+                "<SECTION>\n" +
+                "\n" +
                 "<TITRE>\n" +
                 "Header1\n" +
                 "</TITRE>\n" +
@@ -70,15 +82,25 @@ public class EASTGeneratorTest {
                 "Header2\n" +
                 "</TITRE>\n" +
                 "\n" +
+                "</SECTION>\n" +
+                "\n" +
+                "<SECTION>\n" +
+                "\n" +
                 "<PARAGRAPH>\n" +
-                "On July 2,<EMPHASE>an alien mothership</EMPHASE>entered Earth's orbit and deployed several dozen saucer-shaped \"destroyer\" spacecraft, each 15 miles (24 km)  wide.\n" +
+                "On July 2, <EMPHASE>an alien mothership</EMPHASE> entered Earth's orbit and deployed several dozen saucer-shaped \"destroyer\" spacecraft, each 15 miles (24 km)  wide.\n" +
                 "</PARAGRAPH>\n" +
+                "\n" +
+                "</SECTION>\n" +
+                "\n" +
+                "<SECTION>\n" +
                 "<LISTE couleur_puce=\"green\" type=\"square\">\n" +
                 "<EL>Item 1</EL>\n" +
                 "<EL>Item 2</EL>\n" +
                 "<EL>Item 3</EL>\n" +
                 "\n" +
                 "</LISTE>\n" +
+                "</SECTION>\n" +
+                "\n" +
                 "</EAST>");
         Assert.assertEquals(sb.toString(), tested.generate());
     }

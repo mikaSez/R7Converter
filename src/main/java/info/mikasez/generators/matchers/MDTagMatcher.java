@@ -11,12 +11,22 @@ public class MDTagMatcher implements TagMatcher {
     @Override
     public String getPostTag(DocType type) {
         switch (type) {
+            case Slide:
+                return "\n\n\n";
             case Emphasis:
                 return "* ";
             case StrongEmphasis:
                 return "** ";
             case OneLineCode:
                 return "` ";
+            case TabHeader:
+                return "\n";
+            case TabHeaderElement:
+                return " || ";
+            case TabBody:
+                return "\n";
+            case TabBodyElement:
+                return " | ";
             case Root:
                 return "";
             default:
@@ -28,6 +38,8 @@ public class MDTagMatcher implements TagMatcher {
     @Override
     public String getPreTag(DocType type) {
         switch (type) {
+            case Slide:
+                return "\n\n\n";
             case Paragraph:
                 return "";
             case Header1:
