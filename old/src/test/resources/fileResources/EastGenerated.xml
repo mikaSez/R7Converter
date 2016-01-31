@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="ISO-8859-1"?><EAST transition="burst">
+    <PREFERENCES>
+        <AFFICHAGE>
+            <POLICE_TEXTE font="Comic Sans MS"/>
+        </AFFICHAGE>
+    </PREFERENCES>
+    <SECTION>
+
+        <TITRE>
+            Header1
+        </TITRE>
+
+        <TITRE>
+            Header2
+        </TITRE>
+
+    </SECTION>
+
+    <SECTION>
+
+        <PARAGRAPH>
+            On July 2, <EMPHASE>an alien mothership</EMPHASE> entered Earth's orbit and deployed several dozen saucer-shaped "destroyer" spacecraft, each 15 miles (24 km)  wide.
+        </PARAGRAPH>
+
+    </SECTION>
+
+    <SECTION>
+        <LISTE couleur_puce="green" type="square">
+            <EL>Item 1</EL>
+            <EL>Item 2</EL>
+            <EL>Item 3</EL>
+
+        </LISTE>
+    </SECTION>
+
+</EAST>
