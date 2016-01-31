@@ -1,0 +1,654 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>reveal.js – The HTML Presentation Framework</title>
+
+		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+		<meta name="author" content="Hakim El Hattab">
+
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/beige.css" id="theme">
+		<link rel="stylesheet" href="css/presentable.min.css">
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h1>EAST</h1>
+					<h3>EAsy Slide Tool</h3>
+					<h5>Didier COURTAUD
+					</h5>
+					<h6><small>didier.courtaud@cea.fr</small></h6>
+				</section>
+				<section >
+					<h2>Table of Contents</h2>
+					<nav id="presentable-toc" class="revealjs"></nav>
+				</section>
+				<section>
+					<h2>Introduction</h2>
+				</section>
+				<section>
+				<section>
+					<h2>Généralités</h2>
+						<ul>
+							<li>
+							EAST ( EAsy Slide Tool) est un système de création, de présentation et d'impression de présentations basé sur XML et HTML
+							</li>
+							<li>C'est un système WYSIWM ( What you See Is What you Mean) par opposition aux systèmes classiques de présentation WYSIWYG ( What You See Is What You Get )</li>
+						</ul>
+				</section>
+				<section>
+					<h2>Avantages des systèmes WYSIWYM</h2>
+						<ul>
+							<li>Plus besoin de soucier de la mise en page</li>
+							<li>L'orateur se concentre sur son contenu</li>
+							<li>Son contenu est <em>sémantisé</em></li>
+							<li>La présentation est homogène</li>
+						</ul>
+				</section>
+				<section>
+					    <h2>Avantages des systèmes basés sur HTML</h2>
+						<ul>
+							<li>Directement visualisables par un navigateur Web</li>
+							<li>Bénéficient de toutes les fonctionnalités de HTML : liens, multimédia, ...</li>
+							<li>Installables sur n'importe quel site Web sans transformations</li>
+							<li>Plus légers</li>
+						</ul>	
+				</section>
+				</section>
+				<section>
+				<section>
+					<h2>Généralités ( suite )</h2>
+						<ul> Les présentations EAST fonctionnent :
+							<li>Sur toutes les versions de Firefox depuis la 3.5</li>
+							<li>Débuggage sous IE en cours</li>
+							<li>Pas encore testées sous Google Chrome </li>
+						</ul>
+				</section>
+				<section>
+					    <h2>Elles utilisent</h2>
+						<ul>
+							<li>HTML 5</li>
+							<li>CSS 3</li>
+							<li>Javascript</li>
+						</ul>	
+				</section>
+				</section>
+
+				<section>
+					    <h1>Principes de fonctionnement</h1>
+				</section>
+				<section>
+				<section>
+					<h2>Principes de base</h2>
+					<h3>EAST fonctionne à l'aide de 3 fichiers :</h3>
+						<ul> 
+							<li>Un fichier XML qui est la source de la présentation</li>
+							<li>Un fichier XSLT qui va transformer le fichier XML précédant en fichier HTML</li>
+							<li>Un fichier HTML servant à la présentation </li>
+						</ul>
+				</section>
+				<section>
+					    <h3>Le fichier XML est le <em> coeur </em> de la présentation</h3>
+						<ul>
+							<li>C'est lui qui renferme le contenu</li>
+							<li>C'est le seul à conserver absolument car, à partir de lui, on peut toujours régénérer la présentation </li>
+							<li>Il obéit à un schéma XML qui définit les balises et les attributs sémantiques qui peuvent être utilisés</li>
+							<li>Il peut être créé par n'importe quel éditeur de texte</li>
+							<li>Une interface pour l'éditeur XML gratuit Jaxe est fournie pour aider à la saisie</li>
+						</ul>	
+				</section>
+
+				</section>
+
+
+				<section>
+				<section>
+					<h2>Principes de base ( suite )</h2>
+					<h3>Le fichier XSLT fabrique le fichier HTML selon les <em>directives</em> du fichier XML </h3>
+						<ul> 
+							<li>Il est constitué une fois pour toutes par les développeurs de EAST</li>
+							<li>Il renferme la mise en page commune des présentations</li>
+							<li>Il assure la fabrication du fichier HTML
+								<ul>
+									<li>en appelant les librairies et feuilles de style nécessaires ( timesheets )</li>
+									<li>en mettant en place tous les services : plan, navigation,impression</li>
+								</ul>
+							 </li>
+						</ul>
+				</section>
+				<section>
+					    <h3>Le fichier HTML sert à la présentation</h3>
+						<ul>
+							<li>Il est visualisé par un navigateur Web classique</li>
+							<li>Il fournit tous les services programmés par la feuille de style XSLT
+								<ul>
+									<li>Navigation</li>
+									<li>Mise en page</li>
+									<li>Impression</li>
+								</ul>
+							</li>
+							<li>Il peut être régénéré à volonté à partir du fichier XML</li>
+						</ul>	
+				</section>
+				</section>
+
+				<section>
+					    <h1>Fonctionnalités offertes</h1>
+				</section>
+
+					<section>
+						<h2>Vue d'ensemble</h2>
+						<h3>Le fichier XSLT fabrique le fichier HTML selon les <em>directives</em> du fichier XML </h3>
+						<p>EAST fournit un ensemble de fonctionnalités permettant de mettre en page et d'animer les présentations.
+						</p>
+						<p>Elles peuvent se décomposer en plusieurs catégories</p>
+						<ul>
+							<li>Des fonctionnalités de mise en page : couleurs, style, ..</li>
+							<li>Des fonctionnalités d'animation : navigation entre slides, listes dynamiques</li>
+							<li>Des fonctionnalités d'impression et de sauvegarde</li>
+						</ul>
+					</section>
+					<section>
+					<section>
+						<h2>Fonctionnalités de mise en page</h2>
+						<h3>EAST permet de définir pour tous les slides </h3>
+							<ul> 
+								<li>des logos : en haut à gauche et/ou en haut à droite de chaque slide</li>
+								<li>des pieds de page en bas à gauche et/ou en bas à droite de chaque slide</li>
+							</ul>
+					</section>
+					<section>
+						    <h3>EAST met en place automatiquement</h3>
+							<ul>
+								<li>Un plan détaillé de la présentation</li>
+								<li>Une numérotation des slides positionnée en bas au centre de chaque slide</li>
+								<li>Des slides de séparation entre chaque  <em>PARTIE</em></li>
+							</ul>	
+					</section>
+					<section>
+							<ul>
+								<li>EAST permet également de mettre du contenu en colonnes automatiquement quelque soit le nombre de colonnes</li>
+							</ul>
+						    <h3>EAST permet aussi de définir précisément liste par liste</h3>
+							<ul>
+								<li>la couleur des puces de la liste</li>
+								<li>ou l'image à utiliser comme puce</li>
+								<li class="fragment highlight-red">la couleur du texte de l'item de liste</li>
+							</ul>	
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>Exemples de mise en page</h2>
+							<ul> 
+								<li>Liste à puce carrée verte et texte noir</li>
+							</ul>
+					</section>
+					<section>
+
+							<ul> 
+								<li>Liste à puce ronde rouge et texte marron</li>
+							</ul>
+					</section>
+					<section>
+							<h3>Différents types de puces possibles</h3>
+							<ul> 
+								<li>Numérique grise</li>
+								<li>Alphanumérique minuscule aqua et texte bleu</li>
+								<li>De nouveau numérique grise</li>
+							</ul>
+					</section>
+					<section>
+							<ul> 
+								<li>Liste à puces de type image</li>
+							</ul>
+							<p class="columns2">Voici du texte qui va être mis sur deux colonnes
+				Cela s'applique aussi a d'autres types de contenus comme
+				les images ou les morceaux de code</p>
+							<p>
+								Enfin EAST permet d'utiliser des équations comme celle-ci : \(\sqrt[2]{(x^2+y^2)}=a/b\)
+							</p>
+					</section>
+					
+				</section>
+				<section>
+					<section>
+						<h2>Fonctionnalités d'animation</h2>
+						<h3>EAST propose deux grands types d'animation</h3>
+							<ul>
+								<li>Dynamique des listes</li>
+								<li>Cela permet de gérer la façon dont apparaissent les items des listes</li>
+							</ul>
+					</section>
+					<section>
+							<h3>Transitions entre slides </h3>
+							<ul> 
+								<li>Elles interviennent dans toute navigation d'un slide à un autre que soit en séquence ou par accès direct</li>
+							</ul>
+					</section>
+					<section>
+							<h3>Dynamique des listes </h3>
+							<ul> 
+								<li>Cela permet de gérer la façon dont apparaissent les items des listes</li>
+							</ul>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>Les transitions</h2>
+							<ul>
+								<li>Ce sont en fait des transitions CSS3 définies dans les fichiers de configuration de EAST</li>
+								<li>De ce fait, il faut utiliser des versions récentes des navigateurs pour que cela fonctionne ( &gt; 4 pour Firefox )</li>
+								<li>Il est extrêmement simple d'en définir de nouvelles ( 10 lignes ; environ 10 minutes )</li>
+							</ul>
+					</section>
+					<section>
+							<h3>Dans la version actuelle de EAST</h3>
+							<ul> 
+								<li>La transition est globale pour tous les slides</li>
+								<li>Il existe 6 transitions possibles ( 5 définies par Fabien Cazenave et une par l'auteur )</li>
+								<li>
+									<ul>
+										<li>crossfade : fondu enchainé statique</li>
+										<li>fadethrough :fondu enchaîné dynamique</li>
+										<li>carousel : défilement des slides sous forme de carrousel</li>
+										<li>slide :défilement des slides en déplacement latéral</li>
+										<li>toss :défilement des slides par rotation autour du point bas gauche</li>
+										<li>burst: jaillissement des slides</li>
+									</ul>
+								</li>
+							</ul>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>Dynamique des listes</h2>
+							<ul>
+								<li>Les items de liste peuvent être gérés de façon dynamique pour attirer l'attention des auditeurs</li>
+							</ul>
+					</section>
+					<section>
+							<h3>Il existe plusieurs types de listes dynamiques possibles</h3>
+							<ul> 
+								<li>Listes accordéon
+									<ul>
+										<li>Un seul item est visible à un moment donné</li>
+										<li>Le clic suivant masque cet item et affiche celui sur lequel on a cliqué</li>
+									</ul>
+								</li>
+								<li>Listes pliées
+									<ul>
+										<li>Les items sont masqués par défaut</li>
+										<li>Ils ne se révèlent qu'au clic souris</li>
+									</ul>
+								</li>
+							</ul>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>Dynamique des listes (suite)</h2>
+						<h3>Listes incrémentales</h3>
+							<ul>
+								<li>simple : les items sont masqués et se révèlent les uns après les autres au clic souris</li>
+								<li>ombré : même principe que la simple mais les items "passés" se voilent</li>
+							</ul>
+					</section>
+					<section>
+							<h3>allumée : </h3>
+							<ul> 
+								<li>Au démarrage, les items sont masqués</li>
+								<li>Le premier clic révéle toute la liste en ombré et le premier item passe en rouge</li>
+								<li>Les autres clics laissent les items "passés" en noir et passe l'item courant en rouge</li>
+							</ul>
+					</section>
+
+					<section>
+							<h3>Listes progressives </h3>
+							<ul> 
+								<li>Fonctionnement identique aux listes incrémentales</li>
+								<li>Mais SANS clic souris : la liste se développe automatiquement</li>
+							</ul>
+							<ul>
+							<li>Les slides suivants vous montrent des exemples de ces différentes listes</li>
+							</ul>
+					</section>
+				</section>
+
+
+				<section>
+					<h2>Listes pliées</h2>
+						<ul >
+							<li >Premier item
+								<ul class="fragment grow">SS accordéon 1</ul>
+							</li>
+
+
+							<li>Deuxième item
+								<ul class="fragment grow">SS accordéon 2</ul>
+							</li>
+							<li><a href="#/3">Lien vers le transparent 3</a></li>
+						</ul>
+				</section>
+				<section>
+					<h2>Listes accordéon</h2>
+						<ul >
+							<li >Acc 1 
+								<ul class="fragment current-visible">SS liste 1</ul>
+							</li>
+
+
+							<li>Acc 2
+								<ul class="fragment current-visible">SS liste 2</ul>
+							</li>
+						</ul>
+				</section>
+				<section>
+					<h2>Listes incrémentales</h2>
+						<ul >
+							<li class="fragment">Element Inc 1
+								<ul class="fragment">Ss liste 1</ul>
+							</li>
+
+
+							<li class="fragment">Element Inc 2
+								<ul class="fragment">Sous-liste 2</ul>
+							</li>
+							<li class="fragment">Element Inc 3</li>
+						</ul>
+				</section>
+				<section>
+					<h2>Listes incrémentales ombrées</h2>
+						<ul >
+							<li class="f">Je suis une liste ombrée
+								<ul class="">
+									<li class="fragment highlight-blue">C'est à dire</li>
+									<li class="fragment highlight-blue">ou autrement dit</li>
+								</ul>
+							</li>
+
+
+							<li class="">Que mes items se voilent dès qu'ils ne sont plus actifs
+
+								<ul class="">
+									<li class="fragment highlight-blue">Comme vous le voyez</li>
+									<li class="fragment highlight-blue">ou comme vous devriez le voir</li>
+								</ul>
+							</li>
+						</ul>
+				</section>
+
+				<section>
+					<h2>Liste incrémentale allumée</h2>
+						<h3>Essais de listes</h3>
+						<ul >
+							<li class="fragment highlight-red">Ceci est une liste incrémentale allumée</li>
+							<li class="f">Cela veut dire
+								<ul class="">
+									<li class="fragment highlight-red">Que tous les éléments s'allument séquentiellement en rouge au clic de la souris</li>
+									<li class="fragment highlight-red">Que tous les éléments s'allument séquentiellement en rouge au clic de la souris</li>
+									<li class="fragment hightlight-red">Que les éléments futurs sont visibles en opacité réduite</li>
+								</ul>
+							</li>
+						</ul>
+				</section>
+				<section data-autoslide="1000">
+					<h2>Liste progréssive</h2>
+						<ul >
+							<li class="fragment">Et un</li>
+							<li class="fragment">
+								<ul class="">
+									<li>Et un et demi</li>
+								</ul>
+							</li>
+							<li class="fragment">Et deux</li>
+							<li class="fragment">
+								<ul>
+									<li>Et deux et demi</li>
+								</ul>
+							</li>
+							<li class="fragment">Et trois</li>
+							<li class="fragment">
+								<ul>
+									<li>Et trois et demi</li>
+								</ul>
+							</li>
+							<li class="fragment">Et quatre</li>
+							<li class="fragment">
+								<ul>
+									<li>Et quatre et demi</li>
+								</ul>
+							</li>
+						</ul>
+				</section>
+				<section>
+					<section>
+					<h2>Fonctionnalités de navigation</h2>
+					<h3>On peut naviguer entre les slides de différentes façons :</h3>
+					<ul>
+						<li>par la souris</li>
+						<li>par les raccourcis clavier</li>
+						<li>par les boutons</li>
+						<li>par le hash de l'URL</li>
+					</ul>
+					</section>
+					<section>
+						<h3>Navigation à la souris</h3>
+						<ul>
+						<li>La roulette de la souris permet d'avancer ou de réculer dans le diaporama</li>
+					</ul>
+					</section>
+					<section>
+						<h3>
+							Raccourcis claviers
+						</h3>
+					<ul> 
+						<li>Flèche gauche - Flèche droite : Recule/Avance d'un slide</li>
+						<li>PageUp - PageDown : Recule/Avance d'un slide</li>
+						<li>Barre d'espacement : Avance d'un slide</li>
+						<li>Home : Revient à la page titre</li>
+						<li>Fin : Va à la dernière page</li>
+					</ul>
+					</section>
+					
+				</section>
+
+				<section>
+					<section>
+						<h2>Fonctionnalités de navigation ( suite )</h2>
+						<h3>Navigation grâce aux boutons</h3>
+						<ul> La transformation XSLT crée automatiquement pour chaque slide cinq boutons de navigation positionnés en bas d'écran sous la page
+							<li>|&lt;&lt; : Ramène à la page de titre</li>
+							<li>&lt; prev : Slide précédent</li>
+							<li>next&gt; : Slide suivant</li>
+							<li>&gt;&gt;| : Va à la dernière page</li>
+							<li>Plan : Ramène au plan général de la présentation qui a été créé automatiquement</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Navigation par le hash</h3>
+						<ul>
+							<li>Chaque slide possède sa propre "adresse" ( hash en anglais) sous la forme ( nn désigne numéro du slide par exemple 03 )
+								<ul>
+									<li>mon-fichier.html#slidenn</li>
+								</ul>
+							</li>
+							<li>On peut donc donner au navigateur l'adresse du slide que l'on veut afficher sous la forme
+								<ul>
+									<li>mon-fichier.html#slide18 si on veut afficher le slide 18</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>Fonctionnalités d'impression et de sauvegarde</h2>
+						<ul>
+							<li>EAST va utiliser le système d'impression et de sauvegarde du navigateur pour imprimer ou sauvegarder la présentation</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Il existe un bouton "Print" en bas à droite de la page sous le slide qui initie les fonctions suivantes</h3>
+						<ul>
+							<li>Tous les slides sont visibles et sont mis à la queue leu leu</li>
+							<li>Tous les boutons et les signes plus sont cachés</li>
+							<li>Toutes les listes sont dépliées et affichées</li>
+							<li>Le plan est ramené à sa forme simple</li>
+						</ul>
+					</section>
+					<section>
+						<ul>
+							<li>Une fois cette opération effectuée, il suffit d'utiliser le système d'impression/sauvegarde du navigateur Web pour imprimer ou sauvegarder en PDF la présentation</li>
+						<li>Pour revenir à la présentation, il suffit de demander au navigateur de recharger la page</li>
+					</ul>
+					</section>
+
+						
+				</section>
+				<section>
+					<h3>Fonctionnalités diverses</h3>
+					<ul>
+						<li>Gestion de la taille du texte
+							<ul>
+								<li>Il existe des séquences de touche ou de souris communes à tous les navigateurs pour gérer la taille du texte ( accessibilité )
+									<ul>
+										<li>CTRL + Roulette de souris : Grossit/Réduit le texte</li>
+										<li>CTRL + "+" : Grossit le texte</li>
+										<li>CTRL+ "-" : Réduit le textes</li>
+									</ul>
+								</li>
+								<li>Dans la prochaine version de EAST, deux boutons "A++" et "A--" en bas d'écran sous la page permettront de grossir ou réduire le texte à la souris</li>
+							</ul>
+						</li>
+						
+						<li>Liens : on peut faire des liens <em>internes</em> ( entre slides) ou des liens <em>externes</em> ( d'un slide vers un site Web )</li>
+					</ul>
+				</section>
+
+				<section>
+					<h1>Développements à venir</h1>
+				</section>
+				<section>
+					<section>
+						<h2>Dans la prochaine version</h2>
+						<ul>
+							<h3>Portage sur d'autres navigateurs Web</h3>
+							<ul>
+								<li>Un bug de la librairie timesheets.js empêche le fichier HTML de EAST de tourner sous IE 9</li>
+								<li>Il est en cours de correction</li>
+								<li>Nous allons également tester le HTML de EAST sous les dernières versions de Google Chrome</li>
+							</ul>
+						</ul>	
+					</section>
+					<section>
+						<h3>Possibilité de diffuser des présentations EAST sur un réseau</h3>
+						<ul>
+							<li>L'idée est d'avoir un orateur qui "déroule" une présentation EAST sur son PC</li>
+							<li>Les auditeurs suivent sa présentation sur leur propre navigateur qui tourne sur leur PC</li>
+							<li>Prototype réalisé par mes étudiants à l'Université d'Evry quasi opérationnel</li>
+							<li>Potentiellement utilisable sur Internet ( visioconférence)</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Faciliter le changement de thème</h3>
+						<ul>
+							<li>Le thème actuel est "en dur" dans la feuille de transformation XSLT</li>
+							<li>L'idée est de pouvoir facilement changer de thème de façon externe</li>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<h1>Conclusion</h1>
+				</section>
+				<section>
+					<section>
+						<h2>Conclusion</h2>
+						<h3>EAST est un système très simple d'emploi qui permet de faire des présentations </h3>
+						<ul>
+							<li>dynamiques : puissance de HTML5, CSS et Javascript</li>
+							<li>portables : n'importe quel navigateur Web</li>
+							<li>personnalisables : tout est en Open Source et faciles à personnaliser</li>
+							<li>facilement installables sur un serveur Web</li>
+							<li>même jouables sur les smartphones B2G qui sortiront à la fin de l'année</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Quelques chiffres sur cette présentation pour illustrer la légèreté de la solution</h3>
+						<ul>
+							<li>Fichier XML : ~ 31 koctets ; 481 lignes</li>
+							<li>Fichier HTML : ~ 95 koctets ; 3970 lignes</li>
+						</ul>
+					</section>
+
+				</section>
+
+			</div>
+
+		</div>
+
+		<aside id="presentable-icon" class="revealjs">
+		    <a title="Table of Contents" href="#/1">
+		        <img alt="Table of Contents" src="plugin/presentable/icons/impressjs.png" href="#/1"/>
+		    </a>
+		</aside>
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+				slideNumber: true,
+				mouseWheel: false,
+				transition: 'zoom', // none/fade/slide/convex/concave/zoom
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/math/math.js', async: true },
+					{ src :'plugin/presentable/presentable.min.js' , async: true , callback : function(){presentable.toc({framework: "revealjs"});}}
+				]
+
+			});
+			
+
+		</script>
+
+	</body>
+</html>
