@@ -1,12 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import codecs
+from distutils.file_util import write_file
 from shutil import copy2, rmtree
 from tkinter import *
 from tkinter.filedialog import askopenfilename, asksaveasfilename
 import os.path
 
+
 from os import mkdir
 from pathlib import Path
+
+from RevealGenerator import generateHtmlFile
 
 resources_path = os.path.join(os.path.split(__file__)[0], "resources")
 
@@ -15,6 +20,9 @@ window = Tk()
 
 entry = StringVar("")
 exit = StringVar("")
+def touch(path):
+    with open(path, 'a'):
+        os.utime(path, None)
 
 def copytree(src, dst, symlinks=False, ignore=None):
     for item in os.listdir(src):
@@ -40,6 +48,18 @@ def convert():
     if(os.path.isdir(exitPath+"/revealApp")):
         rmtree(exitPath +"/revealApp")
     copytree(resources_path, exitPath)
+    if not os.path.exists(exit.get()):
+        touch(exit.get())
+    content = generateHtmlFile()
+    save_to_file(content,exit.get())
+
+
+
+def save_to_file(soup,path):
+    fh = codecs.open(path, "wb")
+    string = soup.prettify("utf8")
+    fh.write(string)
+    fh.close()
 
 Label(window, text="Converter EtoR").grid(row=1, column=1)
 
