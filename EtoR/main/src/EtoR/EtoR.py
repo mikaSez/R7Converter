@@ -1,14 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import codecs
-from distutils.file_util import write_file
+import os.path
+from os import mkdir
 from shutil import copy2, rmtree
 from tkinter import *
 from tkinter.filedialog import askopenfilename, asksaveasfilename
-import os.path
 
-
-from os import mkdir
 from pathlib import Path
 
 from RevealGenerator import generateHtmlFile
@@ -50,7 +48,7 @@ def convert():
     copytree(resources_path, exitPath)
     if not os.path.exists(exit.get()):
         touch(exit.get())
-    content = generateHtmlFile()
+    content = generateHtmlFile(codecs.open(entry.get(),"rb"))
     save_to_file(content,exit.get())
 
 
@@ -61,7 +59,7 @@ def save_to_file(soup,path):
     fh.write(string)
     fh.close()
 
-Label(window, text="Converter EtoR").grid(row=1, column=1)
+Label(window, text="Converter etoR").grid(row=1, column=1)
 
 Entry(window, textvariable=entry, width=50, state="readonly").grid(row=2, column=1)
 Button(window, text="Chose entry", command=openFileName, width=30).grid(row=2, column=2)

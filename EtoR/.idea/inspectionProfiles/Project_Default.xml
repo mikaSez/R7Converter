@@ -5,6 +5,7 @@
       <option name="ignoredIdentifiers">
         <list>
           <option value="EtoR.EtoR.*" />
+          <option value="EtoR.RevealGenerator.templet" />
         </list>
       </option>
     </inspection_tool>
