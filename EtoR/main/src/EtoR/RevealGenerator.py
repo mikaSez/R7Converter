@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup, NavigableString, Tag
 
 from templ import templet
 
+
 @templet
 def html_doc(params, content):
     """
@@ -87,14 +88,18 @@ def html_doc(params, content):
 
 empty_allowed_tags = ['br', 'img', 'meta']
 
+
 def is_a_tag(tag):
     return (isinstance(tag, Tag))
+
 
 def is_a_string(tag):
     return (isinstance(tag, NavigableString))
 
+
 def not_empty_string(s):
-	return (is_a_string(s) and  s.string.strip())
+    return (is_a_string(s) and s.string.strip())
+
 
 def processTitle(c, el):
     if c.name is not None and c.name == "TITRE":
@@ -102,12 +107,27 @@ def processTitle(c, el):
         return True
     return False
 
+
 def processParagraphe(obj):
     el = El("p")
     for c in obj.contents:
         if not processTitle(c, el):
             el.insert(El("span", c))
     return el
+
+
+def processListElement(obj):
+    el = El("li")
+    for c in obj.children:
+        if not_empty_string(c):
+            el.insert(El("span", c.string))
+        if is_a_tag(c):
+            if c.name == "LISTE":
+                el.insert(processList(c))
+            else:
+                el.insert(El("em", c.string))
+    return el
+
 
 def processList(obj):
     el = El("ul")
@@ -117,22 +137,24 @@ def processList(obj):
             if not_empty_string(c):
                 el.insert(El("h3", c.string))
             elif is_a_tag(c):
-                el.insert(El("li", c.string))
+                el.insert(processListElement(c))
+
     return el
 
-def processTitre(el):
-    return  El("h2", el.string)
 
-def blockNames(x,y):
+def processTitre(el):
+    return El("h2", el.string)
+
+
+def blockNames(x, y):
     return {
         'PARAGRAPHE': processParagraphe(y),
         'LISTE': processList(y),
         'TITRE': processTitre(y),
-       # 'LISTEDEF':3,
-       # 'TABLEAU':4,
-       # 'COMMENTAIRE':5,
+        # 'LISTEDEF':3,
+        # 'TABLEAU':4,
+        # 'COMMENTAIRE':5,
     }.get(x, El("p", "not yet implemeneted <br/> work in progress :)"))
-
 
 
 def processPart(part, el):
@@ -151,7 +173,6 @@ def processPart(part, el):
         el.insert(s)
 
 
-
 def processTitlePage(part):
     """
     EAST has a tag for title page, with no equivalences in Reveal
@@ -160,10 +181,14 @@ def processTitlePage(part):
     tp = El("Section")
     if part is not None:
         tp.insert(El("h1", part.TITRE.string))
-        tp.insert(El("h3", part.SOUS_TITRE.string))
-        tp.insert(El("h5", part.AUTEUR.string))
-        tp.insert(El("h6", El("small", part.EMAIL.string)))
+        if part.SOUS_TITRE:
+            tp.insert(El("h3", part.SOUS_TITRE.string))
+        if part.AUTEUR:
+            tp.insert(El("h5", part.AUTEUR.string))
+        if part.EMAIL:
+            tp.insert(El("h6", El("small", part.EMAIL.string)))
     return tp
+
 
 def generateHtmlFile(entry):
     xml = BeautifulSoup(entry, "xml")
@@ -177,19 +202,26 @@ def generateHtmlFile(entry):
     ret = BeautifulSoup(html_doc(p, str(el)), 'html.parser')
     return ret
 
+
 class Params:
     """this class is the object representation of powerpoint commentaries"""
+
     def __init__(self, commentaires, buttons):
-        if commentaires == "oui": self.comms = "true"
-        else: self.comms = "false"
-        if buttons == "non" : self.ctrl="false"
-        else: self.ctrl = "true"
+        if commentaires == "oui":
+            self.comms = "true"
+        else:
+            self.comms = "false"
+        if buttons == "non":
+            self.ctrl = "false"
+        else:
+            self.ctrl = "true"
 
         self.path = "revealApp"
 
 
 class El:
     """this class give a simplified representation of an html element"""
+
     def __init__(self, name, content="", clazz=""):
         self.b = name
         self.v = []
@@ -203,18 +235,19 @@ class El:
         """
         ret = "<" + self.b
         if self.c != "":
-            ret += " class=\"" + self.c +'"'
-        return  ret + ">" + self.getValue() + "</" + self.b + ">"
+            ret += " class=\"" + self.c + '"'
+        return ret + ">" + self.getValue() + "</" + self.b + ">"
 
     def insert(self, element):
         self.v.append(element)
 
     def getValue(self):
         """ Assembling all elements into a single string chain """
-        ret =""
+        ret = ""
         for v in self.v:
             ret += str(v)
         return ret
+
     def withClass(self, clazz):
         self.c = clazz
         return self
