@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, NavigableString, Tag
 
 from templ import templet
 
@@ -85,6 +85,54 @@ def html_doc(params, content):
 """
 
 
+empty_allowed_tags = ['br', 'img', 'meta']
+
+def is_a_tag(tag):
+    return (isinstance(tag, Tag))
+
+def is_a_string(tag):
+    return (isinstance(tag, NavigableString))
+
+def not_empty_string(s):
+	return (is_a_string(s) and  s.string.strip())
+
+def processTitle(c, el):
+    if c.name is not None and c.name == "TITRE":
+        el.insert(El("h3", c.string))
+        return True
+    return False
+
+def processParagraphe(obj):
+    el = El("p")
+    for c in obj.contents:
+        if not processTitle(c, el):
+            el.insert(El("span", c))
+    return el
+
+def processList(obj):
+    el = El("ul")
+    for c in obj.children:
+        print(c)
+        if not processTitle(c, el):
+            if not_empty_string(c):
+                el.insert(El("h3", c.string))
+            elif is_a_tag(c):
+                el.insert(El("li", c.string))
+    return el
+
+def processTitre(el):
+    return  El("h2", el.string)
+
+def blockNames(x,y):
+    return {
+        'PARAGRAPHE': processParagraphe(y),
+        'LISTE': processList(y),
+        'TITRE': processTitre(y),
+       # 'LISTEDEF':3,
+       # 'TABLEAU':4,
+       # 'COMMENTAIRE':5,
+    }.get(x, El("p", "not yet implemeneted <br/> work in progress :)"))
+
 
 
 def processPart(part, el):
@@ -96,7 +144,12 @@ def processPart(part, el):
     """
     el.insert(El("section", El("h1", part.TITRE.string)))
     for section in part.find_all("SECTION"):
-        el.insert(El("section", El("h2", section.TITRE.string)))
+        s = El("section")
+        for child in section.contents:
+            if not isinstance(child, NavigableString):
+                s.insert(blockNames(child.name, child))
+        el.insert(s)
+
 
 
 def processTitlePage(part):
