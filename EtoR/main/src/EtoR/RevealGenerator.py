@@ -87,15 +87,39 @@ def html_doc(params, content):
 
 
 
+def processPart(part, el):
+    """
+    Process part processing
+    Calls for all sub part parsers
+    :param part:  the part to be parsed
+    :param el: fragment of the final page
+    """
+    el.insert(El("section", El("h1", part.TITRE.string)))
+    for section in part.find_all("SECTION"):
+        el.insert(El("section", El("h2", section.TITRE.string)))
+
+
+def processTitlePage(part):
+    """
+    EAST has a tag for title page, with no equivalences in Reveal
+    It should be processed as a part, but with specific tags
+    """
+    tp = El("Section")
+    if part is not None:
+        tp.insert(El("h1", part.TITRE.string))
+        tp.insert(El("h3", part.SOUS_TITRE.string))
+        tp.insert(El("h5", part.AUTEUR.string))
+        tp.insert(El("h6", El("small", part.EMAIL.string)))
+    return tp
 
 def generateHtmlFile(entry):
     xml = BeautifulSoup(entry, "xml")
     p = Params("non", "oui")
     el = El("div").withClass("slides")
     EAST = xml.contents[0]
+    el.insert(processTitlePage(EAST.find("PAGE_TITRE")))
     for partie in EAST.find_all("PARTIE"):
-        print (partie);
-        el.insert(El("section", El("h1", partie.TITRE.string)))
+        processPart(partie, el)
 
     ret = BeautifulSoup(html_doc(p, str(el)), 'html.parser')
     return ret
@@ -120,6 +144,10 @@ class El:
         self.v.append(content)
 
     def __str__(self):
+        """
+        A str representation of the html element
+        :return: All values surrounded by tags
+        """
         ret = "<" + self.b
         if self.c != "":
             ret += " class=\"" + self.c +'"'
