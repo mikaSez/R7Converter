@@ -112,7 +112,10 @@ def processParagraphe(obj):
     el = El("p")
     for c in obj.contents:
         if not processTitle(c, el):
-            el.insert(El("span", c))
+            if not_empty_string(c):
+                el.insert(El("span", c.string))
+            elif is_a_tag(c):
+                el.insert(inlineNames(c.name, c))
     return el
 
 
@@ -125,14 +128,13 @@ def processListElement(obj):
             if c.name == "LISTE":
                 el.insert(processList(c))
             else:
-                el.insert(El("em", c.string))
+                el.insert(inlineNames(c.name, c))
     return el
 
 
 def processList(obj):
     el = El("ul")
     for c in obj.children:
-        print(c)
         if not processTitle(c, el):
             if not_empty_string(c):
                 el.insert(El("h3", c.string))
@@ -141,20 +143,35 @@ def processList(obj):
 
     return el
 
+def processExtLink(el):
+    link = El("a", el.string)
+    link.attr("href", el["href"])
+    return link
 
-def processTitre(el):
-    return El("h2", el.string)
+def processEquation(el):
+    return El("span", "\("+el["texte"]+"\)")
 
+
+def inlineNames(x, y):
+    if(x == "EMPHASE"):
+        return El("em", y.string)
+
+    elif(x == "LIEN_EXTERNE"):
+        return processExtLink(y)
+    elif(x == "EQUATION"):
+        return processEquation(y)
+    else:
+        return El("em", "Cannot yet process : " + x  + " sorry :S ")
 
 def blockNames(x, y):
-    return {
-        'PARAGRAPHE': processParagraphe(y),
-        'LISTE': processList(y),
-        'TITRE': processTitre(y),
-        # 'LISTEDEF':3,
-        # 'TABLEAU':4,
-        # 'COMMENTAIRE':5,
-    }.get(x, El("p", "not yet implemeneted <br/> work in progress :)"))
+    if(x=="PARAGRAPHE"):
+        return processParagraphe(y)
+    elif(x=="LISTE"):
+        return processList(y)
+    elif(x=="TITRE"):
+        return El("h2", y.string)
+    else:
+        return  El("p", "not yet implemeneted" + x + "<br/> work in progress :)")
 
 
 def processPart(part, el):
@@ -193,11 +210,12 @@ def processTitlePage(part):
 def generateHtmlFile(entry):
     xml = BeautifulSoup(entry, "xml")
     p = Params("non", "oui")
-    el = El("div").withClass("slides")
+    el = El("div")
+    el.attr("class", "slides")
     EAST = xml.contents[0]
     el.insert(processTitlePage(EAST.find("PAGE_TITRE")))
-    for partie in EAST.find_all("PARTIE"):
-        processPart(partie, el)
+    for part in EAST.find_all("PARTIE"):
+        processPart(part, el)
 
     ret = BeautifulSoup(html_doc(p, str(el)), 'html.parser')
     return ret
@@ -222,10 +240,12 @@ class Params:
 class El:
     """this class give a simplified representation of an html element"""
 
-    def __init__(self, name, content="", clazz=""):
+    def __init__(self, name, content="", refs=None):
         self.b = name
         self.v = []
-        self.c = clazz
+        if(refs is None):
+            refs = {}
+        self.refs = refs
         self.v.append(content)
 
     def __str__(self):
@@ -234,9 +254,18 @@ class El:
         :return: All values surrounded by tags
         """
         ret = "<" + self.b
-        if self.c != "":
-            ret += " class=\"" + self.c + '"'
+        ret += self.attrToString()
         return ret + ">" + self.getValue() + "</" + self.b + ">"
+
+    def attrToString(self):
+        """
+        String representation of the current attributes
+        :return: ref="val" pairs of attributes
+        """
+        ret = ""
+        for k,v in self.refs.items():
+            ret += " " + k + '="'+ v + '"'
+        return ret
 
     def insert(self, element):
         self.v.append(element)
@@ -248,6 +277,15 @@ class El:
             ret += str(v)
         return ret
 
-    def withClass(self, clazz):
-        self.c = clazz
-        return self
+    def attr(self, ref, val):
+        """
+        Adds a value to a specified references
+        There is no consistency check
+        You can add as many attributes as you want to any refs
+        :param ref: the reference to append ex : href
+        :param val: the value to be associated with the reference ex : "www.perdu.com"
+        """
+        if(ref in self.refs): self.refs[ref] = self.refs[ref] + " " + val
+        else : self.refs[ref] = val
+
+

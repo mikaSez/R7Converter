@@ -11,3 +11,14 @@ Feature: Html element
     Given a new element is created
     When i insert another element
     Then second element is printed inside the first
+
+
+  Scenario: Adding one attribute
+    Given a new element is created
+    When i add an attribute
+    Then this attribute is added to the class
+
+  Scenario: Appending an attribute
+    Given an element with class attribute
+    When i add a class attribute
+    Then the element has both attributes
