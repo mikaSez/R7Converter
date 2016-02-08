@@ -29,6 +29,8 @@ def html_doc(params, content):
 		<!-- Code syntax highlighting -->
 		<link rel="stylesheet" href="${params.path}/lib/css/zenburn.css"></link>
 
+		<link rel="stylesheet" href="${params.path}/css/appli.css"></link>
+
 		<!-- Printing and PDF exports -->
 		<script>
 			var link = document.createElement( 'link' );
@@ -134,6 +136,11 @@ def processListElement(obj):
 
 def processList(obj):
     el = El("ul")
+    if obj.get("type") is not None:
+        el.attr("class", obj["type"])
+    if obj.get("couleur_texte") is not None:
+        el.attr("style", "color: " + obj["couleur_texte"]+";")
+
     for c in obj.children:
         if not processTitle(c, el):
             if not_empty_string(c):
@@ -148,9 +155,20 @@ def processExtLink(el):
     link.attr("href", el["href"])
     return link
 
+def processIntLink(el):
+    link = El("a", el.string)
+    link.attr("href", "#/" + el["num"])
+    return link
+
+
 def processEquation(el):
     return El("span", "\("+el["texte"]+"\)")
 
+def processCodeCols(x):
+    ret = El("p", x.string)
+    ret.attr("style", "column-count:" + x["nbcols"]+";")
+    ret.attr("style", "-moz-column-count:" + x["nbcols"]+";")
+    return ret
 
 def inlineNames(x, y):
     if(x == "EMPHASE"):
@@ -160,6 +178,11 @@ def inlineNames(x, y):
         return processExtLink(y)
     elif(x == "EQUATION"):
         return processEquation(y)
+    elif(x== "LIEN_INTERNE"):
+        return processIntLink(y)
+    elif(x=="CODE_COLS"):
+        return processCodeCols(y)
+
     else:
         return El("em", "Cannot yet process : " + x  + " sorry :S ")
 

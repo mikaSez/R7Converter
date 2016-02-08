@@ -1,0 +1,10 @@
+.square{
+    list-style-type:square !important;
+}
+
+.disc{
+    list-style-type:disc !important;
+}
+.circle{
+    list-style-type:circle !important;
+}
