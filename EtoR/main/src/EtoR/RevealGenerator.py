@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import cgi
+from pydoc import html
+
 from bs4 import BeautifulSoup, NavigableString, Tag
 
 from templ import templet
@@ -186,11 +189,18 @@ def inlineNames(x, y):
     else:
         return El("em", "Cannot yet process : " + x  + " sorry :S ")
 
+def processCode(y):
+    el = El("code", html.escape(str(y)))
+    el.attr("class", "html")
+    return el
+
 def blockNames(x, y):
     if(x=="PARAGRAPHE"):
         return processParagraphe(y)
     elif(x=="LISTE"):
         return processList(y)
+    elif(x=="HTML"):
+        return El("pre", processCode(y))
     elif(x=="TITRE"):
         return El("h2", y.string)
     else:
