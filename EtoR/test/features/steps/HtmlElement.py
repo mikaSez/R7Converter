@@ -1,6 +1,6 @@
 from behave import *
 
-from RevealGenerator import El
+from HTMElement import El
 
 use_step_matcher("re")
 

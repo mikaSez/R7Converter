@@ -5,7 +5,23 @@ from pydoc import html
 
 from bs4 import BeautifulSoup, NavigableString, Tag
 
+from HTMElement import El
 from templ import templet
+
+
+@templet
+def attrTemplate(attr):
+    """
+        ${attr.key}:${attr.val};
+    """
+
+@templet
+def style(stl):
+    """
+        ${stl.name}{
+            ${[attrTemplate(attr) for attr in stl.attr]}
+        }
+    """
 
 
 @templet
@@ -16,7 +32,7 @@ def html_doc(params, content):
     <head>
 		<meta charset="utf-8"></meta>
 
-		<title>reveal.js – The HTML Presentation Framework</title>
+		<title>reveal.js</title>
 
 		<meta name="description" content="A presentation"></meta>
 		<meta name="author" content="has to be replaced by AUTOR"></meta>
@@ -46,6 +62,9 @@ def html_doc(params, content):
 		<!--[if lt IE 9]>
 		<script src="${params.path}/lib/js/html5shiv.js"></script>
 		<![endif]-->
+		<style>
+		    ${[style(stl) for stl in params.stl]}
+		</style>
 	</head>
 
 	<body>
@@ -204,7 +223,7 @@ def blockNames(x, y):
     elif(x=="TITRE"):
         return El("h2", y.string)
     else:
-        return  El("p", "not yet implemeneted" + x + "<br/> work in progress :)")
+        return  El("p", "not yet implemeneted " + x + "<br/> work in progress :)")
 
 
 def processPart(part, el):
@@ -239,10 +258,31 @@ def processTitlePage(part):
             tp.insert(El("h6", El("small", part.EMAIL.string)))
     return tp
 
+def processCSSPage(page):
+    stls = []
+    stl = Style("body *")
+    stl.setAttrIfExists("color", page.get("textcolor"))
+    stl.setAttrIfExists("background", page.get("backcolor"))
+    stl.setAttrIfExists("font-family", page.get("font"))
+    stls.append(stl)
+
+    link = Style("a")
+    link.setAttrIfExists("color", page.get("linkcolor"))
+    stls.append(link)
+
+    html = Style("code *")
+    html.setAttrIfExists("background", "none")
+    stls.append(html)
+
+    return stls
 
 def generateHtmlFile(entry):
     xml = BeautifulSoup(entry, "xml")
     p = Params("non", "oui")
+    page = xml.find("PAGE")
+    if page is not None:
+       p.stl = processCSSPage(page)
+
     el = El("div")
     el.attr("class", "slides")
     EAST = xml.contents[0]
@@ -252,6 +292,27 @@ def generateHtmlFile(entry):
 
     ret = BeautifulSoup(html_doc(p, str(el)), 'html.parser')
     return ret
+
+
+class Attribut:
+    def __init__(self, key, value):
+        self.key = key
+        self.val = value
+
+
+class Style:
+
+    def __init__(self, name):
+        self.name = name;
+        self.attr = []
+
+    def setAttr(self, key, value):
+        self.attr.append(Attribut(key, value))
+
+    def setAttrIfExists(self, key, value):
+        if value is not None and key is not None:
+            self.attr.append(Attribut(key, value + "!important"))
+
 
 
 class Params:
@@ -269,56 +330,9 @@ class Params:
 
         self.path = "revealApp"
 
+        self.stl = []
 
-class El:
-    """this class give a simplified representation of an html element"""
-
-    def __init__(self, name, content="", refs=None):
-        self.b = name
-        self.v = []
-        if(refs is None):
-            refs = {}
-        self.refs = refs
-        self.v.append(content)
-
-    def __str__(self):
-        """
-        A str representation of the html element
-        :return: All values surrounded by tags
-        """
-        ret = "<" + self.b
-        ret += self.attrToString()
-        return ret + ">" + self.getValue() + "</" + self.b + ">"
-
-    def attrToString(self):
-        """
-        String representation of the current attributes
-        :return: ref="val" pairs of attributes
-        """
-        ret = ""
-        for k,v in self.refs.items():
-            ret += " " + k + '="'+ v + '"'
-        return ret
-
-    def insert(self, element):
-        self.v.append(element)
-
-    def getValue(self):
-        """ Assembling all elements into a single string chain """
-        ret = ""
-        for v in self.v:
-            ret += str(v)
-        return ret
-
-    def attr(self, ref, val):
-        """
-        Adds a value to a specified references
-        There is no consistency check
-        You can add as many attributes as you want to any refs
-        :param ref: the reference to append ex : href
-        :param val: the value to be associated with the reference ex : "www.perdu.com"
-        """
-        if(ref in self.refs): self.refs[ref] = self.refs[ref] + " " + val
-        else : self.refs[ref] = val
+    def addStyle(self, stl):
+        self.stl.append(stl)
 
 
