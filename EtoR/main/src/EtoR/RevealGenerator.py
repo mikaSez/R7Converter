@@ -223,7 +223,10 @@ def inlineNames(x, y):
         return processIntLink(y)
     elif(x=="CODE_COLS"):
         return processCodeCols(y)
-
+    elif(x=="BR"):
+        return El("br")
+    elif(x=="ESP"):
+        return El("span", "&#xA0;")
     else:
         return El("em", "Cannot yet process : " + x  + " sorry :S ")
 
