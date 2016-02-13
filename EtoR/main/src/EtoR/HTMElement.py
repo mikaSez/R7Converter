@@ -4,6 +4,11 @@
 class El:
     """this class give a simplified representation of an html element"""
 
+
+    @classmethod
+    def enableStyle(self, style):
+        El.printStyle = style
+
     def __init__(self, name, content="", refs=None):
         self.b = name
         self.v = []
@@ -49,6 +54,8 @@ class El:
         :param ref: the reference to append ex : href
         :param val: the value to be associated with the reference ex : "www.perdu.com"
         """
+        if not El.printStyle and ref == "style": return
+
         if(ref in self.refs): self.refs[ref] = self.refs[ref] + " " + val
         else : self.refs[ref] = val
 

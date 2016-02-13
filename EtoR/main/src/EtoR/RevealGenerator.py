@@ -143,8 +143,9 @@ def processParagraphe(obj):
     return el
 
 
-def processListElement(obj):
+def processListElement(obj, mode):
     el = El("li")
+    el.attr("class", mode)
     for c in obj.children:
         if not_empty_string(c):
             el.insert(El("span", c.string))
@@ -155,20 +156,38 @@ def processListElement(obj):
                 el.insert(inlineNames(c.name, c))
     return el
 
+def getMode(mode):
+    """
+    Process EAST mode code and returns reveal class
+    Classes are chosen by closest resemblance
+    :param mode: EAST mode code
+    :return: Reveal class
+    """
+    if(mode == "incremental_allume"):
+        return "fragment highlight-red"
+    if(mode == "incremental_ombre"):
+        return "fragment highlight-blue"
+    if(mode == "pliage"):
+        return "fragment grow"
+    if(mode == "accordeon"):
+        return "fragment current-visible"
+    return "fragment"
 
 def processList(obj):
     el = El("ul")
+    mode = ""
     if obj.get("type") is not None:
         el.attr("class", obj["type"])
     if obj.get("couleur_texte") is not None:
         el.attr("style", "color: " + obj["couleur_texte"]+";")
-
+    if obj.get("mode") is not None:
+        mode = getMode(obj.get("mode"))
     for c in obj.children:
         if not processTitle(c, el):
             if not_empty_string(c):
                 el.insert(El("h3", c.string))
             elif is_a_tag(c):
-                el.insert(processListElement(c))
+                el.insert(processListElement(c, mode))
 
     return el
 
@@ -213,6 +232,16 @@ def processCode(y):
     el.attr("class", "html")
     return el
 
+def processListDef(y):
+    el = El("dl")
+    for child in y.contents:
+        if child.name == "TITRE":
+            el.insert(El("h3", child.string))
+        elif child.name == "DEF":
+            el.insert(El("dd", child.string))
+        elif child.name == "TERME":
+            el.insert(El("dt", child.string))
+    return el
 def blockNames(x, y):
     if(x=="PARAGRAPHE"):
         return processParagraphe(y)
@@ -222,6 +251,8 @@ def blockNames(x, y):
         return El("pre", processCode(y))
     elif(x=="TITRE"):
         return El("h2", y.string)
+    elif(x=="LISTEDEF"):
+        return processListDef(y)
     else:
         return  El("p", "not yet implemeneted " + x + "<br/> work in progress :)")
 
@@ -258,38 +289,58 @@ def processTitlePage(part):
             tp.insert(El("h6", El("small", part.EMAIL.string)))
     return tp
 
-def processCSSPage(page):
-    stls = []
-    stl = Style("body *")
+def processFinalPage(part):
+    """
+        EAST has a tag for the final page, with no equivalences in Reveal
+        It should be processed as a part with specific tags
+    """
+    fp = El("Section")
+    if(part is not None):
+        for child in part.contents:
+            if child.name == "PARAGRAPHE": fp.insert(processParagraphe(child))
+            if child.name == "EMAIL": fp.insert(El("h4", child))
+    return fp
+
+
+
+def processCSSPage(page, pstl):
+
+    stl = Style("section, h1, h2, h3, h4, p, ul, li, body")
     stl.setAttrIfExists("color", page.get("textcolor"))
     stl.setAttrIfExists("background", page.get("backcolor"))
     stl.setAttrIfExists("font-family", page.get("font"))
-    stls.append(stl)
+    pstl.append(stl)
 
     link = Style("a")
     link.setAttrIfExists("color", page.get("linkcolor"))
-    stls.append(link)
+    pstl.append(link)
 
-    html = Style("code *")
-    html.setAttrIfExists("background", "none")
-    stls.append(html)
+def processCSSTitles(page, pstl):
+    stl = Style("section>h1, section>h2, section>h3")
+    stl.setAttrIfExists("color", page.get("textcolor"))
+    stl.setAttrIfExists("background", page.get("backcolor"))
+    stl.setAttrIfExists("font-family", page.get("font"))
+    pstl.append(stl)
 
-    return stls
 
-def generateHtmlFile(entry):
+def generateHtmlFile(entry, disableStyle):
     xml = BeautifulSoup(entry, "xml")
+    Style.enableStyle(disableStyle is not 1)
+    El.enableStyle(disableStyle is not 1)
     p = Params("non", "oui")
     page = xml.find("PAGE")
     if page is not None:
-       p.stl = processCSSPage(page)
-
+       processCSSPage(page,p.stl)
+    titles = xml.find("TITLES")
+    if titles is not None:
+       processCSSTitles(titles, p.stl)
     el = El("div")
     el.attr("class", "slides")
     EAST = xml.contents[0]
     el.insert(processTitlePage(EAST.find("PAGE_TITRE")))
     for part in EAST.find_all("PARTIE"):
         processPart(part, el)
-
+    el.insert(processFinalPage(EAST.find("PAGE_CONCLUSION")))
     ret = BeautifulSoup(html_doc(p, str(el)), 'html.parser')
     return ret
 
@@ -302,16 +353,22 @@ class Attribut:
 
 class Style:
 
+
+    @classmethod
+    def enableStyle(self, style):
+        Style.printStyle = style
+
     def __init__(self, name):
         self.name = name;
         self.attr = []
 
     def setAttr(self, key, value):
-        self.attr.append(Attribut(key, value))
+        if print :
+            self.attr.append(Attribut(key, value))
 
     def setAttrIfExists(self, key, value):
-        if value is not None and key is not None:
-            self.attr.append(Attribut(key, value + "!important"))
+        if value is not None and key is not None and Style.printStyle:
+            self.attr.append(Attribut(key, value + ""))
 
 
 

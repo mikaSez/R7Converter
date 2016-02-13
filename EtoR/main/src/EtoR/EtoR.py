@@ -18,6 +18,8 @@ window = Tk()
 
 entry = StringVar("")
 exit = StringVar("")
+
+disable = IntVar()
 def touch(path):
     with open(path, 'a'):
         os.utime(path, None)
@@ -48,7 +50,7 @@ def convert():
     copytree(resources_path, exitPath)
     if not os.path.exists(exit.get()):
         touch(exit.get())
-    content = generateHtmlFile(codecs.open(entry.get(),"rb"))
+    content = generateHtmlFile(codecs.open(entry.get(),"rb"), disable.get())
     save_to_file(content,exit.get())
 
 
@@ -70,7 +72,7 @@ Entry(window, textvariable=exit, width=50, state="readonly").grid(row=3, column=
 Button(window, text="Chose exit directory (default : same)", command=saveAs, width=30).grid(row=3, column=2)
 
 
-Checkbutton(window, text="Override").grid(row=4, column=1)
+Checkbutton(window, text="Disable custom styles", variable=disable).grid(row=4, column=1)
 Button(window, text="Close", command=window.quit, width=20).grid(row=5, column=1)
 Button(window, text="Run", command=convert, width=20).grid(row=5, column=2)
 window.mainloop()
