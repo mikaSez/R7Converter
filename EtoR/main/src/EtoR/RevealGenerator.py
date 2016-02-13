@@ -305,18 +305,18 @@ def processFinalPage(part):
 
 def processCSSPage(page, pstl):
 
-    stl = Style("section, h1, h2, h3, h4, p, ul, li, body")
+    stl = Style("section, .reveal h3, .reveal h4, .reveal h5, .reveal h6, .reveal p, .reveal ul, .reveal li,  body")
     stl.setAttrIfExists("color", page.get("textcolor"))
     stl.setAttrIfExists("background", page.get("backcolor"))
     stl.setAttrIfExists("font-family", page.get("font"))
     pstl.append(stl)
 
-    link = Style("a")
+    link = Style(".reveal a")
     link.setAttrIfExists("color", page.get("linkcolor"))
     pstl.append(link)
 
 def processCSSTitles(page, pstl):
-    stl = Style("section>h1, section>h2, section>h3")
+    stl = Style(".reveal h1, .reveal h2, .reveal h3")
     stl.setAttrIfExists("color", page.get("textcolor"))
     stl.setAttrIfExists("background", page.get("backcolor"))
     stl.setAttrIfExists("font-family", page.get("font"))
