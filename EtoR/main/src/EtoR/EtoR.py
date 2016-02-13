@@ -64,12 +64,12 @@ def save_to_file(soup,path):
 Label(window, text="Converter etoR").grid(row=1, column=1)
 
 Entry(window, textvariable=entry, width=50, state="readonly").grid(row=2, column=1)
-Button(window, text="Chose entry", command=openFileName, width=30).grid(row=2, column=2)
+Button(window, text="Choose entry", command=openFileName, width=30).grid(row=2, column=2)
 
 
 
 Entry(window, textvariable=exit, width=50, state="readonly").grid(row=3, column=1)
-Button(window, text="Chose exit directory (default : same)", command=saveAs, width=30).grid(row=3, column=2)
+Button(window, text="Choose exit directory (default : same)", command=saveAs, width=30).grid(row=3, column=2)
 
 
 Checkbutton(window, text="Disable custom styles", variable=disable).grid(row=4, column=1)
