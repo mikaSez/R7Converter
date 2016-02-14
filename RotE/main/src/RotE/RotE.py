@@ -9,7 +9,7 @@ from tkinter.filedialog import askopenfilename, asksaveasfilename
 
 from pathlib import Path
 
-from RevealGenerator import generateHtmlFile
+from EASTGenerator import generateEASTFile
 
 resources_path = os.path.join(os.path.split(__file__)[0], "resources")
 
@@ -55,8 +55,8 @@ def convert():
 
     if not os.path.exists(exit.get()):
         touch(exit.get())
-    #content = "<xml></xml>"
-    #save_to_file(content,exit.get())
+    content = generateEASTFile(codecs.open(entry.get(),"rb"))
+    save_to_file(content,exit.get())
 
 
 
