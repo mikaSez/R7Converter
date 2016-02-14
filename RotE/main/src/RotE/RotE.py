@@ -45,7 +45,6 @@ def saveAs():
 
 def convert():
     exitPath = str(Path(exit.get()).parent)
-    print(enable.get())
     if enable.get() == 1:
         if(os.path.isdir(exitPath+"/config_EAST")):
             rmtree(exitPath +"/config_EAST")
