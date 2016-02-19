@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import re
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, NavigableString, Tag
+
 
 def is_valid_header(s):
     return is_header(s) and s.string
@@ -34,6 +35,46 @@ def appendTitre(part, text, soup):
         part.append(titre)
 
 
+def processEmphase(tag, element, soup):
+    t = soup.new_tag("em")
+
+    if(tag.string):
+        t.append(tag.string)
+    element.append(t)
+
+
+def processInline(tag, element, soup):
+    print("tag : " + tag)
+    if isinstance(tag, NavigableString):
+        element.append(tag.string)
+    else:
+        print(tag)
+        if tag.name=="span":
+            print("span")
+            processInline(tag, element, soup)
+        elif tag.name== "em" or tag.name=="strong": processEmphase(tag, element, soup)
+        else :
+            t = soup.new_tag("notYEt")
+            element.append(t)
+
+
+
+def processBlocks(section, elements, soup):
+
+    for el in elements:
+        if(el.name=="p"):
+            tag = soup.new_tag("PARAGRAPHE")
+            tag.append(repr(el.children))
+        if(el.name=="ul"):
+            tag = soup.new_tag("LISTE")
+            for le in el.children:
+                listElement = soup.new_tag("EL")
+                listElement.append(repr(le))
+                tag.append(listElement)
+        else:
+            tag = soup.new_tag("lala")
+            tag.append( "BLA BLA BLA BLA")
+        section.append(tag)
 
 def processSections(sections, soup):
     part = soup.new_tag("PARTIE")
@@ -41,10 +82,10 @@ def processSections(sections, soup):
     east.append(part)
 
     for section in sections:
-        if(len(section.find_all()) == 1):
+        if len(section.find_all()) == 1:
             h = section.find(is_header)
-            if(h):
-                if(len(part.find_all()) != 0):
+            if h:
+                if len(part.find_all()) != 0:
                     part = soup.new_tag("PARTIE")
                     east.append(part)
                 appendTitre(part, h, soup)
@@ -55,6 +96,8 @@ def processSections(sections, soup):
 
         t = section.find(is_big_header)
         appendTitre(s, t, soup)
+        sib = section.contents
+        processBlocks(s,sib,soup)
 
 
 

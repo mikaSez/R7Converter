@@ -1,0 +1,214 @@
+<!DOCTYPE doctype html>
+<html lang="fr">
+ <head>
+  <meta charset="utf8"/>
+  <title>
+   reveal.js
+  </title>
+  <meta content="A presentation" name="description"/>
+  <meta content="has to be replaced by AUTOR" name="author"/>
+  <meta content="yes" name="apple-mobile-web-app-capable"/>
+  <meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/>
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui" name="viewport"/>
+  <link href="revealApp/css/reveal.css" rel="stylesheet"/>
+  <link href="revealApp/css/theme/sky.css" id="theme" rel="stylesheet"/>
+  <link href="revealApp/css/presentable.min.css" rel="stylesheet"/>
+  <!-- Code syntax highlighting -->
+  <link href="revealApp/lib/css/zenburn.css" rel="stylesheet"/>
+  <link href="revealApp/css/appli.css" rel="stylesheet"/>
+  <!-- Printing and PDF exports -->
+  <script>
+   var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'revealApp/css/print/pdf.css' : 'revealApp/css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+  </script>
+ 
+ </head>
+ <body>
+  <div class="reveal">
+    <div class="slides">
+     <section>
+        <h1>EAST - Reveal.js</h1>
+        <h3>Mikhaïl Sadovnikov</h3>
+        <h5>Référent : Didier Courtaud</h5>
+      </section>
+        <section >
+          <h2>Sommaire</h2>
+          <nav id="presentable-toc" class="revealjs"></nav>
+        </section>
+        <section>
+          <section>
+            <h2>
+              Présentation des frameworks  
+            </h2>
+          </section>
+          <section>
+            <h2>EAST</h2>
+            <ul>
+              <li>Logiciel open source</li>
+              <li>Utilisé à EVRY</li>
+              <li>Basé XML</li>
+            </ul>
+          </section>
+          <section>
+            <h2>Reveal.js</h2>
+            <ul>
+              <li>Logiciel open source</li>
+              <li>L'un des logiciels de présentation web les plus utilisés</li>
+              <li>Basé HTML/javascript</li>
+            </ul>
+          </section>
+        </section>
+
+        <section>
+            <h2>Presentation du sujet</h2>
+            <ul>
+              <li>Réaliser la documentation de EAST</li>
+              <li>Réaliser un projet EAST</li>
+              <li>Réaliser une projet Reveal</li>
+              <li>Faire l'étude sur la conversion</li>
+              <li>Réaliser un convertisseur EAST -> Reveal.js</li>
+              <li>Réaliser un convertisseur Reveal.js -> EAST</li>
+            </ul>
+
+        </section>
+
+        <section>
+          <h2>Realiser la documentation de EAST</h2>
+          <ul>
+            <li>Découvrir fonctionnalités de EAST</li>
+          </ul>
+        </section>
+        <section>
+          <h2>Realiser le projet EAST</h2>
+          <ul>
+              <li class="fragment">Découvrir la création d'un projet EAST</li>
+              <li class="fragment">Avoir un projet étalon pour la génération vers EAST</li>
+              <li class="fragment">Avoir un projet depuis lequel générer un projet Reveal</li>
+           </ul>
+        </section>
+        <section>
+          <h2>Réaliser le projet Reveal.js</h2>
+          <ul>
+            <li id="element1" class="fragment">Découvrir la création d'un projet Reveal.js</li>
+            <li id="element2" class="fragment">Avoir un projet étalon pour la génération vers Reveal.js</li>
+            <li id="element3" class="fragment">Avoir un projet depuis lequel générer un projet Reveal</li>
+          </ul>
+        </section>
+        <section>
+          <section>
+             <h2>Réaliser l'étude de conversion</h2>   
+          </section>
+         <section>
+            <h2>Vers Reveal</h2>
+            <ul>
+              <li>La structure libre de Reveal permet une conversion aisée </li>
+              <li>La taille des polices dans l'ensemble des thèmes est très grande</li>
+              <li>Les animations nécessitent de trouver des equivalents</li>
+            </ul>
+         </section>
+         <section>
+           <h2>Vers EAST</h2>
+           <ul>
+             <li>La structure Fixe de EAST rend difficile la conversion depuis un format libre</li>
+             <li>Les animations, à part les listes, ne sont pas transposables vers EAST</li>
+           </ul>
+         </section>
+        </section>
+        <section>
+          <section>
+            <h1>Réalisation EAST -> Reveal.js</h1>
+          </section>
+          <section>
+            <h2>Avancés</h2>
+            <ul>
+              <li>Les principaux blocks réalisés</li>
+              <li>Les principaux élements inline réalisés</li>
+              <li>Animations : animations de liste réalisées</li>
+            </ul>
+          </section>
+          <section>
+            <h2>Difficultés</h2>
+            <ul>
+              <li>Réalisation du sommaire</li>
+              <li>Récupération des paramètres</li>
+            </ul>
+          </section>
+          <section>
+            <h2>Les plus de la conversion</h2>
+            <ul>
+              <li>Fonctionnement sur tous les navigateurs</li>
+              <li>Interprétation des equations</li>
+            </ul>
+          </section>
+          <section>
+            <h2>Reste à faire</h2>
+            <ul>
+              <li>Gestion des images</li>
+              <li>Gestion des vidéos</li>
+              <li>Autres balises peu utilisées</li>
+            </ul>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h1>Réalisation Reveal.js -> EAST</h1>  
+          </section>
+          <section>
+            <h2>Avancés</h2>
+            <ul>
+              <li>Géneration des pages titres / conclusion</li>
+              <li>Conversion des titres</li>
+              <li>Conversion du contenu des listes et des paragraphes</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2>Difficultés</h2>
+            <ul>
+              <li>Passage d'une structure libre vers une structure stricte </li>
+              <li>Styles peu transposables</li>
+              <li>Structure transposable sous condition</li>
+            </ul>
+          </section>
+        </section>
+        <section>
+          <h1>Conclusion et Demo</h1>
+        </section>
+    </div>
+  </div>
+  <aside class="revealjs" id="presentable-icon">
+   <a href="#/1" title="Table of Contents">
+    <img alt="Table of Contents" href="#/1" src="revealApp/plugin/presentable/icons/impressjs.png"/>
+   </a>
+  </aside>
+  <script src="revealApp/lib/js/head.min.js">
+  </script>
+  <script src="revealApp/js/reveal.js">
+  </script>
+  <script>
+   Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+				slideNumber: true,
+				showNotes: false,
+				mouseWheel: false,
+				transition: 'zoom', // none/fade/slide/convex/concave/zoom
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'revealApp/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'revealApp/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'revealApp/plugin/notes/notes.js', async: true },
+					{ src: 'revealApp/plugin/math/math.js', async: true },
+					{ src :'revealApp/plugin/presentable/presentable.min.js' , async: true , callback : function(){presentable.toc({framework: "revealjs"});}}
+				]
+			});
+  </script>
+ </body>
+</html>
