@@ -72,8 +72,7 @@ def processBlocks(section, elements, soup):
                 listElement.append(repr(le))
                 tag.append(listElement)
         else:
-            tag = soup.new_tag("lala")
-            tag.append( "BLA BLA BLA BLA")
+            continue
         section.append(tag)
 
 def processSections(sections, soup):
@@ -102,8 +101,8 @@ def processSections(sections, soup):
 
 
 def generateEASTFile(entry):
-    html = BeautifulSoup(entry, "html.parser")
-    ret = BeautifulSoup("""<?xml version="1.0" encoding="UTF8"?><EAST transition="burst"><PAGE_TITRE> </PAGE_TITRE></EAST>""", 'xml')
+    html = BeautifulSoup(entry, "html5lib")
+    ret = BeautifulSoup("""<EAST transition="burst"><PAGE_TITRE> </PAGE_TITRE></EAST>""", 'xml')
     title_page = html.find("section")
     processTitlePage(title_page, ret)
     processSections(title_page.find_all_next("section"), ret)

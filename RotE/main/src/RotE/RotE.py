@@ -7,6 +7,7 @@ from shutil import copy2, rmtree
 from tkinter import *
 from tkinter.filedialog import askopenfilename, asksaveasfilename
 
+import bs4
 from pathlib import Path
 
 from EASTGenerator import generateEASTFile
@@ -57,12 +58,22 @@ def convert():
     content = generateEASTFile(codecs.open(entry.get(),"rb"))
     save_to_file(content,exit.get())
 
+def _remove_xml_header(data):
+    return re.sub(r'<\s*\?xml\s*[^\?>]*\?*>\s*','',data, flags=re.I)
+
 
 
 def save_to_file(soup,path):
     fh = codecs.open(path, "wb")
+    fh.write(bytes("""<?xml version="1.0" encoding="utf8"?><?xml-stylesheet type="text/xsl" href="schema_EAST/EAST.xsl" ?>""","UTF8"))
+    for e in soup:
+        if isinstance(e, bs4.element.ProcessingInstruction):
+            e.extract()
+            print(e)
+            break
     string = soup.prettify("utf8")
-    fh.write(string)
+    text = _remove_xml_header(string.decode())
+    fh.write(bytes(text,"UTF8"))
     fh.close()
 
 Label(window, text="Converter RotE").grid(row=1, column=1)
