@@ -326,6 +326,16 @@ def processCSSTitles(page, pstl):
     pstl.append(stl)
 
 
+def generateSummary():
+    summary = El("section")
+    summary.insert(El("h2", "Table of Contents"))
+    nav = El("nav")
+    nav.attr("id", "presentable-toc")
+    nav.attr("class", "revealjs")
+    summary.insert(nav)
+    return summary
+
+
 def generateHtmlFile(entry, disableStyle):
     xml = BeautifulSoup(entry, "xml")
     Style.enableStyle(disableStyle is not 1)
@@ -341,6 +351,7 @@ def generateHtmlFile(entry, disableStyle):
     el.attr("class", "slides")
     EAST = xml.contents[0]
     el.insert(processTitlePage(EAST.find("PAGE_TITRE")))
+    el.insert(generateSummary())
     for part in EAST.find_all("PARTIE"):
         processPart(part, el)
     el.insert(processFinalPage(EAST.find("PAGE_CONCLUSION")))
